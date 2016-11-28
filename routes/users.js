@@ -25,6 +25,9 @@ router.post('/register',  function(req, res){
 	var uname = req.body.username;
 	var pword = req.body.password;
 	var pword2 = req.body.password2;
+	uname = uname.replace(/\s+/g, '').toLowerCase();
+
+
 
 	req.checkBody('name', 'Name is required').notEmpty();
 	req.checkBody('email', 'Email is required').notEmpty();
@@ -35,36 +38,53 @@ router.post('/register',  function(req, res){
 
 	var errors = req.validationErrors();
 
-	if(errors){
-		res.render('register',{
-			errors:errors
-		});
+	if(uname){
+		User.getUserByUsername(uname, function(err, user){
+		   	if(err) throw err;
+		   	console.log('user::'+user);
+		   	if(user){
+			   	if(user.username == uname ){
+			   		errors = [ { param: 'username', msg: 'Username USED', value: '' } ];
+			   	}
+			}
+
+		   	if(errors){
+				res.render('register',{
+					errors:errors
+				});
+			}else
+			{
+				var newUser = new User({
+					name: name,
+					email:email,
+					username: uname,
+					password: pword
+				});
+
+				User.createUser(newUser, function(err, user){
+					if(err) throw err;
+					console.log(user);
+				});
+
+				req.flash('success_msg', 'You are registered and can now login');
+
+				res.redirect('/users/login');
+			}
+	   });
 	}else
 	{
-		uname = uname.replace(/\s+/g, '').toLowerCase();;
-		var newUser = new User({
-			name: name,
-			email:email,
-			username: uname,
-			password: pword
-		});
-
-		User.createUser(newUser, function(err, user){
-			if(err) throw err;
-			console.log(user);
-		});
-
-		req.flash('success_msg', 'You are registered and can now login');
-
-		res.redirect('/users/login');
-
-
+		res.render('register',{
+					errors:errors
+				});
 	}
+	
 
 });
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
+	username = username.replace(/\s+/g, '').toLowerCase();
+
    User.getUserByUsername(username, function(err, user){
    	if(err) throw err;
    	if(!user){

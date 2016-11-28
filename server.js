@@ -1,3 +1,5 @@
+//author ryan lildhar 
+//sid 100459851
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -13,7 +15,6 @@ var mongoose = require('mongoose');
 var MongoDBStore = require('connect-mongodb-session')(session);
 
 
-
 mongoose.connect('mongodb://localhost/webdev_project');
 var db = mongoose.connection;
 
@@ -25,7 +26,18 @@ var app = express();
 
 // View Engine
 app.set('views', path.join(__dirname, 'views'));
-app.engine('handlebars', exphbs({defaultLayout:'layout'}));
+app.engine('handlebars', exphbs({
+  defaultLayout:'layout',
+  helpers: {
+            section: function (name, options) {
+                if (!this._sections) {
+                    this._sections = {};
+                }
+                this._sections[name] = options.fn(this);
+                return null;
+            }
+          }
+}));
 app.set('view engine', 'handlebars');
 
 // BodyParser Middleware
