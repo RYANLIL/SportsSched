@@ -40,7 +40,7 @@ $(document).ready(function(){
 
     $('#saveAll').click(function(){
         createJson();
-        //github();
+        github();
     })
 
 });

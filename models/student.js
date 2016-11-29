@@ -35,13 +35,19 @@ module.exports.deleteStudentsByID = function(id){
 }
 
 module.exports.createStudent = function(newStudent){
-	//newStudent.save();
+	newStudent.save();
 }
 
 module.exports.updateStudentById = function(id, student){
-	var query = {_id:id};
+	var query = {'_id':id};
 
-	Student.findOneAndUpdate(query, student,{upsert:true});
+	Student.findOneAndUpdate(query, student, function(err, doc){
+		    if (err) 
+		    	console.log(err);
+		    else
+		    	console.log("succesfully saved");
+		});
+	//Student.findOneAndUpdate(id, student,{upsert:true}).exec();;
 
 	// Student.findById(id, function(err, doc) {
 	//     if (err) {
@@ -54,5 +60,4 @@ module.exports.updateStudentById = function(id, student){
 	//     doc.username = student.username;
 	//     doc.save();
 	//   });
-	console.log('updating')
 }

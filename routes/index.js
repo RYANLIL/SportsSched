@@ -33,15 +33,27 @@ router.post('/save', function(req,res){
 		var repository = obj[i].repository;
 		var obID = obj[i].obID;
 
-		var newStudent = Student({
-			sid: studentId,
-			fname: firstName,
-			lname: lastName,
-			repo: repository,
-			username: req.user.username
-		});
-		console.log('obid::' + obID)
-		Student.updateStudentById(obID, newStudent);
+		if('obID' in obj[i]){
+			var newStudent = {
+				sid: studentId,
+				fname: firstName,
+				lname: lastName,
+				repo: repository,
+				username: req.user.username
+			}
+			console.log('obid::' + obID)
+			Student.updateStudentById(obID, newStudent);
+		}
+		else{
+			var newStudent = new Student({
+				sid: studentId,
+				fname: firstName,
+				lname: lastName,
+				repo: repository,
+				username: req.user.username
+			})
+			Student.createStudent(newStudent);
+		}
 
 		// if('obID' in obj)
 		// 	Student.updateStudentById(obID, newStudent);
