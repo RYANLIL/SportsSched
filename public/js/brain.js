@@ -11,6 +11,8 @@ $(document).on('click','.page-header', function(){
         });
 });
 
+
+
 $(document).ready(function(){
 
     $.ajax({
@@ -25,10 +27,25 @@ $(document).ready(function(){
                         + '<td tabindex=1>' + this.sid + '</td>'
                         + '<td tabindex=1>' + this.fname + '</td>'
                         + '<td tabindex=1>' + this.lname + '</td>'
-                        + '<td tabindex=1>' + this.repo + '</td>'
-                        + '<td tabindex=1>' + '<i class="fa fa-trash-o" aria-hidden="true"> </i><input type="hidden" value="'+ this._id +'">' + '</td>'
+                        + '<td tabindex=1 class="github_url">' + this.repo + '</td>'
+                        + '<th class="deleteRow" tabindex=1>' + '<i class="fa fa-trash-o" aria-hidden="true"> </i><input type="hidden" value="'+ this._id +'">' + '</th>'
                     + '</tr>'
                 )
+            })
+
+            $('.deleteRow').click(function(){
+                var idToDelete = $(this).parent().children().find('input').attr('value')
+                var trFather = $(this).parent()
+                $.ajax({
+                    type: "POST",
+                    url: "/delete",
+                    data: {
+                        id: idToDelete,
+                    },
+                    success: function(){
+                        $(trFather).remove()
+                    }
+                })
             })
         }
     });
@@ -41,7 +58,6 @@ $(document).ready(function(){
         createJson();
         github();
     })
-
 
 });
 
