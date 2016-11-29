@@ -13,7 +13,12 @@ router.get('/', ensureAuth, function(req, res){
 	res.render('index');
 });
 
-
+router.get('/get', function(req,res){
+	var username = req.user.username;
+	Student.getStudentsByUser(username,function(err,students){
+		res.send(students);		
+	});
+});
 
 router.post('/',  function(req, res){
 	console.log(req.body);

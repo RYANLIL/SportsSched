@@ -1,10 +1,13 @@
 //var moment = require('moment-timezone');
 $(document).on('click','.page-header', function(){
-    console.log('sending json');
+    console.log('getting students json');
     $.ajax({
-          type: "POST",
-          url: "/",
-          data: JSON.stringify({ test: 'test' })
+          type: "GET",
+          url: "/get",
+          success:
+          function(data){
+            console.log(data)
+          }
         });
 });
 $(document).ready(function(){
