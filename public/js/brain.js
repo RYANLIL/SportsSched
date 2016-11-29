@@ -1,3 +1,21 @@
+<<<<<<< HEAD
+=======
+//var moment = require('moment-timezone');
+$(document).on('click','.page-header', function(){
+    console.log('getting students json');
+    $.ajax({
+          type: "GET",
+          url: "/get",
+          success:
+          function(data){
+            console.log(data)
+          }
+        });
+});
+
+
+
+>>>>>>> a59285e5622c9189e308a42e66df91961bd4f0dd
 $(document).ready(function(){
 
     $.ajax({
@@ -11,9 +29,28 @@ $(document).ready(function(){
                         + '<td tabindex=1>' + this.fname + '</td>'
                         + '<td tabindex=1>' + this.lname + '</td>'
                         + '<td tabindex=1 class="github_url">' + this.repo + '</td>'
+<<<<<<< HEAD
                         + '<td tabindex=1>' + '<i class="fa fa-trash-o" aria-hidden="true"> </i><input type="hidden" value="'+ this._id +'">' + '</td>'
+=======
+                        + '<th class="deleteRow" tabindex=1>' + '<i class="fa fa-trash-o" aria-hidden="true"> </i><input type="hidden" value="'+ this._id +'">' + '</th>'
+>>>>>>> a59285e5622c9189e308a42e66df91961bd4f0dd
                     + '</tr>'
                 )
+            })
+
+            $('.deleteRow').click(function(){
+                var idToDelete = $(this).parent().children().find('input').attr('value')
+                var trFather = $(this).parent()
+                $.ajax({
+                    type: "POST",
+                    url: "/delete",
+                    data: {
+                        id: idToDelete,
+                    },
+                    success: function(){
+                        $(trFather).remove()
+                    }
+                })
             })
         }
     });
@@ -26,7 +63,6 @@ $(document).ready(function(){
         createJson();
         //github();
     })
-
 
 });
 function row(){
