@@ -5,23 +5,20 @@ var Student = require('../models/student');
 
 // Get Dashboard
 router.get('/', ensureAuth, function(req, res){
-	var username = req.user.username;
-	console.log('username::' + username );
-	Student.getStudentsByUser(username,function(err,students){
-		console.log(students);
-	});
 	res.render('index');
 });
-
+//retreving users students
 router.get('/get', function(req,res){
 	var username = req.user.username;
 	Student.getStudentsByUser(username,function(err,students){
 		res.send(students);		
 	});
 });
-
-router.post('/',  function(req, res){
-	console.log(req.body);
+//deleting student 
+router.post('/delete',  function(req, res){
+	console.log(req.body.id);
+	Student.deleteStudentsByID(req.body.id);
+	res.send('Student Deleted');
 });
 
 function ensureAuth(req, res, next){

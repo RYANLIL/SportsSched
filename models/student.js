@@ -25,6 +25,11 @@ var Student = module.exports = mongoose.model('Student', StudentSchema);
 
 module.exports.getStudentsByUser = function(username, callback){
 	var query = {userID: username};
-	console.log('models');
 	Student.find(query, callback);
+}
+
+module.exports.deleteStudentsByID = function(id){
+	var query = {_id:id};
+
+	Student.findByIdAndRemove(id).exec();	
 }

@@ -9,6 +9,17 @@ $(document).on('click','.page-header', function(){
             console.log(data)
           }
         });
+    
+    if(confirm("delete?")){
+        $.ajax({
+              type: "POST",
+              url: "/delete",
+              data:{
+                id:"583d04decc3f7d701877da94"
+              }
+        });
+        console.log('deleteing student');
+    }
 });
 
 $(document).ready(function(){
@@ -63,7 +74,6 @@ function createJson(){
     jsonObj = [];
 
     $('#studentTable > tbody  > tr').each(function() {
-        console.log(this);
         item = {}
         //console.log($(this).children().eq(0).text());
         item["studentId"] = $(this).children().eq(0).text();
@@ -74,7 +84,6 @@ function createJson(){
         jsonObj.push(item);
 
     });
-    console.log(jsonObj);
     jsonString = JSON.stringify(jsonObj);
 }
 
@@ -93,8 +102,6 @@ function github(){
         // New Urls
         var repositoryJsonURL = website + user + "/" + repo
         var contributorsJsonURL = repositoryJsonURL + "/contributors"
-        console.log(repositoryJsonURL);
-        console.log(contributorsJsonURL);
 
         // Get Repo Info
 
@@ -105,8 +112,6 @@ function github(){
             dataType: "json",
             async: false,
             success: function(result){
-                console.log(result);
-
                 $("#results").append(
                     '<h3>'+
                         '<a href="'
@@ -133,8 +138,6 @@ function github(){
             dataType: "json",
             async: false,
             success: function(result){
-                console.log(result);
-                console.log(result.length)
                 $(result).each(function(){
                     $("#results").append(
                         //'<div>'+
