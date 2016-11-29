@@ -2,8 +2,16 @@
   margin-top: 0;
 }
 #register-form{
-	max-width: 300px;
+	max-width: 400px;
 }
 footer{
   margin-top: 50px;
+}
+
+.invalid-textbox{
+	border: solid 1px red;
+}
+.valid-textbox{
+	border: solid 3px lightgreen;
+
 }

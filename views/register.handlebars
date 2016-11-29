@@ -1,6 +1,7 @@
 {{#section 'head'}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script type="text/javascript" src="js/validation.js"></script>
+    <script type="text/javascript" src="/js/validation.js"></script>
+
 {{/section}}
 
 <h2 class="page-header">Register</h2>
@@ -12,23 +13,23 @@
 <form id="register-form" method="post" action="/users/register">
    <div class="form-group">
     <label>Name</label>
-    <input type="text" class="form-control" placeholder="Name" name="name">
+    <input id="name" type="text" class="form-control invalid-textbox" placeholder="Name" name="name">
   </div>
   <div class="form-group">
     <label>Username</label>
-    <input type="text" class="form-control" placeholder="Username" name="username">
+    <input id="uname" type="text" class="form-control invalid-textbox" placeholder="Username" name="username">
   </div>
    <div class="form-group">
     <label>Email</label>
-    <input type="email" class="form-control" placeholder="Email" name="email">
+    <input id="email" type="email" class="form-control invalid-textbox" placeholder="Email" name="email">
   </div>
   <div class="form-group">
     <label>Password</label>
-    <input type="password" class="form-control" placeholder="Password" name="password">
+    <input id="password" type="password" class="form-control invalid-textbox" placeholder="Password" name="password">
   </div>
   <div class="form-group">
     <label>Confirm Password</label>
-    <input type="password" class="form-control" placeholder="Password" name="password2">
+    <input id="password2" type="password" class="form-control invalid-textbox" placeholder="Password" name="password2">
   </div>
-  <button id="btn_register" type="submit" class="btn btn-default">Submit</button>
+  <button id="btn_register" type="submit" disabled class="btn btn-default">Submit</button>
 </form>
