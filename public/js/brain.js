@@ -1,31 +1,16 @@
-//var moment = require('moment-timezone');
-$(document).on('click','.page-header', function(){
-    console.log('getting students json');
-    $.ajax({
-          type: "GET",
-          url: "/get",
-          success:
-          function(data){
-            console.log(data)
-          }
-        });
-});
-
 $(document).ready(function(){
 
     $.ajax({
         type: "GET",
         url: "/get",
         success: function(data){
-
-            console.log(data)
             $(data).each(function(){
                 $('#studentTable tr:first').after(
                     '<tr>'
                         + '<td tabindex=1>' + this.sid + '</td>'
                         + '<td tabindex=1>' + this.fname + '</td>'
                         + '<td tabindex=1>' + this.lname + '</td>'
-                        + '<td tabindex=1>' + this.repo + '</td>'
+                        + '<td tabindex=1 class="github_url">' + this.repo + '</td>'
                         + '<td tabindex=1>' + '<i class="fa fa-trash-o" aria-hidden="true"> </i><input type="hidden" value="'+ this._id +'">' + '</td>'
                     + '</tr>'
                 )
@@ -39,13 +24,11 @@ $(document).ready(function(){
 
     $('#saveAll').click(function(){
         createJson();
-        github();
+        //github();
     })
 
 
 });
-
-
 function row(){
     $('table td').on('change', function(evt, newValue) {
     	// do something with the new cell value
@@ -87,19 +70,30 @@ function createJson(){
     jsonObj = [];
 
     $('#studentTable > tbody  > tr').each(function() {
-        console.log(this);
         item = {}
-        //console.log($(this).children().eq(0).text());
+
         item["studentId"] = $(this).children().eq(0).text();
         item["firstName"] = $(this).children().eq(1).text();
         item["lastName"] = $(this).children().eq(2).text();
         item["repository"] = $(this).children().eq(3).text();
-
-        jsonObj.push(item);
+        item["obID"] = $(this).children().eq(4).find('input:hidden').val();
+        
+        if(item["studentId"] != 'Student ID')
+            jsonObj.push(item);
 
     });
-    console.log(jsonObj);
+    jsonObj.splice(-1,1);
+
+    //console.log(jsonObj)
+
     jsonString = JSON.stringify(jsonObj);
+    //sending student info to be inserted or updated
+    $.ajax({
+        type: "POST",
+        url: "/save",
+        data: { students: jsonString }
+    });
+
 }
 
 function github(){
@@ -113,12 +107,11 @@ function github(){
         var parseRepoURL =  githubURL.split("/");
         var user = parseRepoURL[3];
         var repo = parseRepoURL[4];
-
+        if(user === null || repo === null)
+            return;
         // New Urls
         var repositoryJsonURL = website + user + "/" + repo
         var contributorsJsonURL = repositoryJsonURL + "/contributors"
-        console.log(repositoryJsonURL);
-        console.log(contributorsJsonURL);
 
         // Get Repo Info
 
@@ -129,7 +122,6 @@ function github(){
             dataType: "json",
             async: false,
             success: function(result){
-                console.log(result);
 
                 $("#results").append(
                     '<h3>'+
@@ -157,8 +149,6 @@ function github(){
             dataType: "json",
             async: false,
             success: function(result){
-                console.log(result);
-                console.log(result.length)
                 $(result).each(function(){
                     $("#results").append(
                         //'<div>'+

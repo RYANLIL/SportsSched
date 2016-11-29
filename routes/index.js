@@ -21,6 +21,36 @@ router.post('/delete',  function(req, res){
 	res.send('Student Deleted');
 });
 
+router.post('/save', function(req,res){
+	console.log(req.user.username);
+
+	var obj = JSON.parse(req.body.students);
+
+	for (var i = 0; i < obj.length; i++) {
+		var studentId = obj[i].studentId;
+		var firstName = obj[i].firstName;
+		var lastName = obj[i].lastName;
+		var repository = obj[i].repository;
+		var obID = obj[i].obID;
+
+		var newStudent = Student({
+			sid: studentId,
+			fname: firstName,
+			lname: lastName,
+			repo: repository,
+			username: req.user.username
+		});
+		console.log('obid::' + obID)
+		Student.updateStudentById(obID, newStudent);
+
+		// if('obID' in obj)
+		// 	Student.updateStudentById(obID, newStudent);
+		// else
+		// 	Student.createStudent(newStudent);
+	
+	};
+});
+
 function ensureAuth(req, res, next){
 	if(req.isAuthenticated()){
 		return next();
