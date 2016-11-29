@@ -10,12 +10,77 @@ $(document).on('click','.page-header', function(){
           }
         });
 });
+
 $(document).ready(function(){
+    $('#studentTable').editableTableWidget();
+    row(); //This function allows the table to append rows as it increases.
 
-    
+    $('#saveAll').click(function(){
+        createJson();
+        github();
+    })
+});
 
+
+function row(){
+    $('table td').on('change', function(evt, newValue) {
+    	// do something with the new cell value
+        var tr = $(this).parent();
+
+        studentId = tr.children().eq(0).html();
+        firstName = tr.children().eq(1).html();
+        lastName = tr.children().eq(2).html();
+        repository = tr.children().eq(3).html();
+
+        if($(tr).attr('class') == "lastRow"){
+            if(studentId != "&nbsp;" && firstName != "&nbsp;" && lastName != "&nbsp;" && repository != "&nbsp;"){
+                // Add Delete Icon
+
+                // Add new row
+                $('#studentTable').append(
+                    '<tr class="lastRow">'
+                        +'<td>&nbsp;</td>'
+                        +'<td>&nbsp;</td>'
+                        +'<td>&nbsp;</td>'
+                        +'<td class="github_url">&nbsp;</td>'
+                        +'<td>&nbsp;</td>'
+                    +'</tr>'
+                );
+                $(tr).attr('class', '');
+                $('#studentTable').editableTableWidget();
+                row();
+            }
+        }
+
+    	if (newValue == "34") {
+    		return false; // reject change
+    	}
+    });
+}
+
+
+function createJson(){
+    jsonObj = [];
+
+    $('#studentTable > tbody  > tr').each(function() {
+        console.log(this);
+        item = {}
+        //console.log($(this).children().eq(0).text());
+        item["studentId"] = $(this).children().eq(0).text();
+        item["firstName"] = $(this).children().eq(1).text();
+        item["lastName"] = $(this).children().eq(2).text();
+        item["repository"] = $(this).children().eq(3).text();
+
+        jsonObj.push(item);
+
+    });
+    console.log(jsonObj);
+    jsonString = JSON.stringify(jsonObj);
+}
+
+function github(){
     var website = "https://api.github.com/repos/"
-
+    $("#results").html("");
     $(".github_url").each(function(){
         // Get Student URL Project
         var githubURL = $(this).text();
@@ -58,8 +123,6 @@ $(document).ready(function(){
                         +'<strong> Days since last update:</strong>'
                     +'</p>'
                 );
-
-
             }
         });
 
@@ -76,18 +139,13 @@ $(document).ready(function(){
                     $("#results").append(
                         //'<div>'+
                             //this.login
-                            '<a href="'+this.html_url+'">'
+                            '<a href="'+this.html_url+'" target="_blank">'
                             +'<img src="'+this.avatar_url+'" height="200px" width="200px" alt="'+this.login+'">'
                             +'</a>'
                         //+'</div>'
                     );
                 });
-
-
             }
         });
-
-
-
     });
-});
+}
