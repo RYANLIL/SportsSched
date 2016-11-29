@@ -9,20 +9,31 @@ $(document).on('click','.page-header', function(){
             console.log(data)
           }
         });
-    
-    if(confirm("delete?")){
-        $.ajax({
-              type: "POST",
-              url: "/delete",
-              data:{
-                id:"583d04decc3f7d701877da94"
-              }
-        });
-        console.log('deleteing student');
-    }
 });
 
 $(document).ready(function(){
+
+    $.ajax({
+        type: "GET",
+        url: "/get",
+        success: function(data){
+
+            console.log(data)
+            $(data).each(function(){
+                $('#studentTable tr:first').after(
+                    '<tr>'
+                        + '<td tabindex=1>' + this.sid + '</td>'
+                        + '<td tabindex=1>' + this.fname + '</td>'
+                        + '<td tabindex=1>' + this.lname + '</td>'
+                        + '<td tabindex=1>' + this.repo + '</td>'
+                        + '<td tabindex=1>' + '<i class="fa fa-trash-o" aria-hidden="true"> </i><input type="hidden" value="'+ this._id +'">' + '</td>'
+                    + '</tr>'
+                )
+            })
+        }
+    });
+
+
     $('#studentTable').editableTableWidget();
     row(); //This function allows the table to append rows as it increases.
 
@@ -30,6 +41,8 @@ $(document).ready(function(){
         createJson();
         github();
     })
+
+
 });
 
 
@@ -74,6 +87,7 @@ function createJson(){
     jsonObj = [];
 
     $('#studentTable > tbody  > tr').each(function() {
+        console.log(this);
         item = {}
         //console.log($(this).children().eq(0).text());
         item["studentId"] = $(this).children().eq(0).text();
@@ -84,6 +98,7 @@ function createJson(){
         jsonObj.push(item);
 
     });
+    console.log(jsonObj);
     jsonString = JSON.stringify(jsonObj);
 }
 
@@ -102,6 +117,8 @@ function github(){
         // New Urls
         var repositoryJsonURL = website + user + "/" + repo
         var contributorsJsonURL = repositoryJsonURL + "/contributors"
+        console.log(repositoryJsonURL);
+        console.log(contributorsJsonURL);
 
         // Get Repo Info
 
@@ -112,6 +129,8 @@ function github(){
             dataType: "json",
             async: false,
             success: function(result){
+                console.log(result);
+
                 $("#results").append(
                     '<h3>'+
                         '<a href="'
@@ -138,6 +157,8 @@ function github(){
             dataType: "json",
             async: false,
             success: function(result){
+                console.log(result);
+                console.log(result.length)
                 $(result).each(function(){
                     $("#results").append(
                         //'<div>'+
@@ -152,3 +173,4 @@ function github(){
         });
     });
 }
+
